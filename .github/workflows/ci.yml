@@ -1,0 +1,39 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ebupd01:
+    name: build, unit + golden regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: docker/setup-buildx-action@v3
+
+      # GnuCOBOL and GixSQL are built from source (~10 min cold); the GitHub
+      # Actions cache makes later runs take seconds.
+      - name: Build toolchain image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile
+          tags: ams-editbook-toolchain:latest
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: make ci (lint, build, cobol-check, pytest)
+        run: make ci
+
+      - name: Keep job outputs when something fails
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ebupd01-outputs
+          path: |
+            data/out/
+            testruns/

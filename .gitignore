@@ -1,0 +1,18 @@
+# build and job output
+bin/
+obj/
+data/work/
+data/out/
+*.log
+!tests/golden/*.log
+trace*.txt
+
+# python
+.venv/
+__pycache__/
+.pytest_cache/
+
+# cobol-check scratch
+testruns/
+
+.DS_Store

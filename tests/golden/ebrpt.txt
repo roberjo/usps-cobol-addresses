@@ -1,0 +1,62 @@
+1EBRPT     AMS EDIT BOOK UPDATE - JOB EBUPD01      RUN DATE 2026/10/05    MODE UPDATE                                      PAGE    1
+ SECTION 1 - REJECTED TRANSACTIONS
+0STEP     RSN DESCRIPTION               ACT ZIP5  RTE      SEQ  PRIMARY    STREET NAME                   UNIT      CARR   EDITDATE
+ ------------------------------------------------------------------------------------------------------------------------------------
+ EBVALID  09  LOW/HIGH-VALUES IN TEXT    A  00011 C002       9  100        ............................            12345C 20260915
+ EBVALID  08  DELIVERY SEQUENCE INVALID  A  00011 C002       0  100        ELM ST                                  12345C 20260915
+ EBVALID  06  EDIT DATE AFTER RUN DATE   A  00011 C002       9  100        ELM ST                                  12345C 20261006
+ EBVALID  08  DELIVERY SEQUENCE INVALID  A  00011 C002 *BADPK*  100        ELM ST                                  12345C 20260915
+ EBVALID  07  ROUTE NOT ON AMS_ROUTE     A  00019 C002       9  100        ELM ST                                  12345C 20260915
+ EBVALID  04  REQUIRED FIELD MISSING     A  00011 C002       9  100                                                12345C 20260915
+ EBVALID  08  DELIVERY SEQUENCE INVALID  A  00011 C002      -4  100        ELM ST                                  12345C 20260915
+ EBVALID  02  ZIP5 NOT NUMERIC           A  0A011 C002       5  100        ELM ST                                  12345C 20260915
+ EBVALID  05  EDIT DATE INVALID          A  00011 C002       9  100        ELM ST                                  12345C 2026SEPT
+ EBVALID  01  INVALID ACTION CODE        U  00011 C002       5  100        ELM ST                                  12345C 20260915
+ EBVALID  01  INVALID ACTION CODE        X  00011 C002       5  100        ELM ST                                  12345C 20260915
+ EBVALID  02  ZIP5 NOT NUMERIC           A        C002       5  100        ELM ST                                  12345C 20260915
+ EBVALID  03  ZIP4 NOT NUMERIC           C  00011 C002       7  100        ELM ST                                  12345C 20260915
+ EBVALID  09  LOW/HIGH-VALUES IN TEXT    C  00011 C002       9  100        ELM.ST                                  12345C 20260915
+ EBVALID  04  REQUIRED FIELD MISSING     A  00011 C002       9             ELM ST                                  12345C 20260915
+ EBVALID  04  REQUIRED FIELD MISSING     D  00011 C002       9                                                     12345C 20260915
+ EBVALID  04  REQUIRED FIELD MISSING     A  00011 C002       9  100        ELM ST                                         20260915
+ EBVALID  05  EDIT DATE INVALID          A  00011 C002       9  100        ELM ST                                  12345C 20261341
+ EBVALID  07  ROUTE NOT ON AMS_ROUTE     A  00011 C099       9  100        ELM ST                                  12345C 20260915
+ EBUPDT   10  ADDRESS NOT FOUND AT SEQ   C  00011 C002    9001  100        ELM ST                                  12345C 20260915
+ EBUPDT   10  ADDRESS NOT FOUND AT SEQ   D  00011 C002    9000  100        ELM ST                                  12345C 20260915
+ EBUPDT   12  ADDRESS MISMATCH AT SEQ    D  00011 C002      51  99999      WARD GREEN                              12345C 20260915
+ EBUPDT   11  DUPLICATE ACTIVE ADDRESS   A  00011 C002       3  6018       HALL THROUGHWAY                         12345C 20260915
+0TOTAL REJECTED BY EBVALID                                        19
+0TOTAL REJECTED BY EBUPDT                                          4
+1EBRPT     AMS EDIT BOOK UPDATE - JOB EBUPD01      RUN DATE 2026/10/05    MODE UPDATE                                      PAGE    2
+ SECTION 1 - REJECTS BY REASON CODE
+0RSN DESCRIPTION                        COUNT
+ ------------------------------------------------------------------------------------------------------------------------------------
+ 01  INVALID ACTION CODE                    2
+ 02  ZIP5 NOT NUMERIC                       2
+ 03  ZIP4 NOT NUMERIC                       1
+ 04  REQUIRED FIELD MISSING                 4
+ 05  EDIT DATE INVALID                      2
+ 06  EDIT DATE AFTER RUN DATE               1
+ 07  ROUTE NOT ON AMS_ROUTE                 2
+ 08  DELIVERY SEQUENCE INVALID              3
+ 09  LOW/HIGH-VALUES IN TEXT                2
+ 10  ADDRESS NOT FOUND AT SEQ               2
+ 11  DUPLICATE ACTIVE ADDRESS               1
+ 12  ADDRESS MISMATCH AT SEQ                1
+1EBRPT     AMS EDIT BOOK UPDATE - JOB EBUPD01      RUN DATE 2026/10/05    MODE UPDATE                                      PAGE    3
+ SECTION 2 - ROUTE SUMMARY
+0ZIP5  ROUTE    ADDS  CHANGES  DELETES  SHIFTED  VAL-REJ  UPD-REJ   ACTIVE
+ ------------------------------------------------------------------------------------------------------------------------------------
+       C002        0        0        0        0        1        0        0
+ 00011 C002       14        9       14    1,000       15        4      157
+ 00011 C099        0        0        0        0        1        0        0
+ 00011 R001       12        8        9    2,334        0        0      369
+ 00012 C001       18       14       14    1,752        0        0      255
+ 00012 C005       11       14       14    1,771        0        0      270
+ 00013 C003       12        9       15    1,188        0        0      300
+ 00019 C002        0        0        0        0        1        0        0
+ 0A011 C002        0        0        0        0        1        0        0
+0TOTAL            67       54       66    8,045       19        4    1,351
+0*** CHANGES COMMITTED TO AMS ***
+0EDIT BOOKS WRITTEN TO EBBOOK (ROUTES)                             5
+ EDIT BOOK ADDRESS LINES                                       1,351

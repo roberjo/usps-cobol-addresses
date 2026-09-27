@@ -1,0 +1,122 @@
+           TestSuite "EBVRULES field edits"
+
+           BEFORE-EACH
+           INITIALIZE EB-TRANS-REC
+           MOVE 'A'          TO EBT-ACTION-CD
+           MOVE '00011'      TO EBT-ZIP5
+           MOVE 'C002'       TO EBT-ROUTE-ID
+           MOVE 5            TO EBT-DLVY-SEQ
+           MOVE '100'        TO EBT-PRIMARY-NBR
+           MOVE 'ELM ST'     TO EBT-STREET-NAME
+           MOVE SPACES       TO EBT-UNIT
+           MOVE '1234'       TO EBT-ZIP4
+           MOVE '12345C'     TO EBT-CARRIER-ID
+           MOVE 20260915     TO EBT-EDIT-DATE
+           MOVE 20261005     TO LK-RUNDATE
+           MOVE '00'         TO LK-REASON-CD
+           END-BEFORE
+
+           TestCase "a well-formed add passes every edit"
+           PERFORM 1000-EDIT-ACTION
+           PERFORM 2000-EDIT-ZIP
+           PERFORM 3000-EDIT-TEXT-CHARS
+           PERFORM 4000-EDIT-REQUIRED
+           PERFORM 5000-EDIT-DATE
+           PERFORM 6000-EDIT-SEQUENCE
+           Expect LK-REASON-CD to be '00'
+
+           TestCase "action code other than A, C, D is reason 01"
+           MOVE 'X' TO EBT-ACTION-CD
+           PERFORM 1000-EDIT-ACTION
+           Expect LK-REASON-CD to be '01'
+
+           TestCase "lower-case action code is reason 01"
+           MOVE 'a' TO EBT-ACTION-CD
+           PERFORM 1000-EDIT-ACTION
+           Expect LK-REASON-CD to be '01'
+
+           TestCase "non-numeric ZIP5 is reason 02"
+           MOVE '0A011' TO EBT-ZIP5
+           PERFORM 2000-EDIT-ZIP
+           Expect LK-REASON-CD to be '02'
+
+           TestCase "blank ZIP5 is reason 02"
+           MOVE SPACES TO EBT-ZIP5
+           PERFORM 2000-EDIT-ZIP
+           Expect LK-REASON-CD to be '02'
+
+           TestCase "blank ZIP4 is allowed"
+           MOVE SPACES TO EBT-ZIP4
+           PERFORM 2000-EDIT-ZIP
+           Expect LK-REASON-CD to be '00'
+
+           TestCase "non-numeric ZIP4 is reason 03"
+           MOVE '12B4' TO EBT-ZIP4
+           PERFORM 2000-EDIT-ZIP
+           Expect LK-REASON-CD to be '03'
+
+           TestCase "LOW-VALUES in street name is reason 09"
+           MOVE LOW-VALUES TO EBT-STREET-NAME
+           PERFORM 3000-EDIT-TEXT-CHARS
+           Expect LK-REASON-CD to be '09'
+
+           TestCase "one HIGH-VALUE byte in primary number is reason 09"
+           MOVE HIGH-VALUE TO EBT-PRIMARY-NBR(2:1)
+           PERFORM 3000-EDIT-TEXT-CHARS
+           Expect LK-REASON-CD to be '09'
+
+           TestCase "missing street on an add is reason 04"
+           MOVE SPACES TO EBT-STREET-NAME
+           PERFORM 4000-EDIT-REQUIRED
+           Expect LK-REASON-CD to be '04'
+
+           TestCase "missing street on a delete is allowed"
+           MOVE 'D' TO EBT-ACTION-CD
+           MOVE SPACES TO EBT-STREET-NAME
+           PERFORM 4000-EDIT-REQUIRED
+           Expect LK-REASON-CD to be '00'
+
+           TestCase "missing primary number is reason 04"
+           MOVE SPACES TO EBT-PRIMARY-NBR
+           PERFORM 4000-EDIT-REQUIRED
+           Expect LK-REASON-CD to be '04'
+
+           TestCase "missing carrier id is reason 04"
+           MOVE SPACES TO EBT-CARRIER-ID
+           PERFORM 4000-EDIT-REQUIRED
+           Expect LK-REASON-CD to be '04'
+
+           TestCase "impossible calendar date is reason 05"
+           MOVE 20260231 TO EBT-EDIT-DATE
+           PERFORM 5000-EDIT-DATE
+           Expect LK-REASON-CD to be '05'
+
+           TestCase "non-numeric edit date is reason 05"
+           MOVE 'SEPT2026' TO EBT-EDIT-DATE-X
+           PERFORM 5000-EDIT-DATE
+           Expect LK-REASON-CD to be '05'
+
+           TestCase "edit date equal to run date is allowed"
+           MOVE 20261005 TO EBT-EDIT-DATE
+           PERFORM 5000-EDIT-DATE
+           Expect LK-REASON-CD to be '00'
+
+           TestCase "edit date after run date is reason 06"
+           MOVE 20261006 TO EBT-EDIT-DATE
+           PERFORM 5000-EDIT-DATE
+           Expect LK-REASON-CD to be '06'
+
+           TestCase "zero delivery sequence is reason 08"
+           MOVE ZERO TO EBT-DLVY-SEQ
+           PERFORM 6000-EDIT-SEQUENCE
+           Expect LK-REASON-CD to be '08'
+
+           TestCase "negative delivery sequence is reason 08"
+           MOVE -4 TO EBT-DLVY-SEQ
+           PERFORM 6000-EDIT-SEQUENCE
+           Expect LK-REASON-CD to be '08'
+
+           TestCase "spaces in the packed sequence are reason 08, not S0C7"
+           MOVE SPACES TO EB-TRANS-REC(11:4)
+           PERFORM 6000-EDIT-SEQUENCE
+           Expect LK-REASON-CD to be '08'

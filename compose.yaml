@@ -1,0 +1,32 @@
+# Toolchain + mock "DB2" (PostgreSQL). Usage: make shell / make ci
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ams
+      POSTGRES_PASSWORD: ams
+      POSTGRES_DB: amsdev
+    ports: ["5432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ams -d amsdev"]
+      interval: 2s
+      timeout: 3s
+      retries: 30
+
+  toolchain:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: ams-editbook-toolchain:latest
+    working_dir: /work
+    volumes:
+      - .:/work
+    environment:
+      PGHOST: db
+      PGPORT: "5432"
+      PGUSER: ams
+      PGPASSWORD: ams
+      PGDATABASE: amsdev
+    depends_on:
+      db:
+        condition: service_healthy
