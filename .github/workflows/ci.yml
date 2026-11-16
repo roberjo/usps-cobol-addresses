@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: docker/setup-buildx-action@v3
+      - uses: docker/setup-buildx-action@v4
 
       # GnuCOBOL and GixSQL are built from source (~10 min cold); the GitHub
       # Actions cache makes later runs take seconds.
