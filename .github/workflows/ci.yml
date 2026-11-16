@@ -17,7 +17,7 @@ jobs:
       # GnuCOBOL and GixSQL are built from source (~10 min cold); the GitHub
       # Actions cache makes later runs take seconds.
       - name: Build toolchain image
-        uses: docker/build-push-action@v6
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: docker/Dockerfile
